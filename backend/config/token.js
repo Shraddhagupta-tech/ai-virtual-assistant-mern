@@ -1,13 +1,13 @@
 import User from "../models/userModel.js";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-const genToken = (UserId) => {
+const genToken = async (userId) => {
   try {
-    const token=await jwt.sign({userId},process.env.JWT_SECRET,{expiresIn:'7d'}
-    )
+    const token = await jwt.sign({ userId }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
   } catch (error) {
     console.log(error);
-    
   }
 };
-export default genToken
+export default genToken;
