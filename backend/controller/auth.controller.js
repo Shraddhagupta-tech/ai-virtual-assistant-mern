@@ -1,6 +1,8 @@
 import connectDb from "../config/connectDb.js";
 import genToken from "../config/token.js";
 import User from "../models/userModel.js";
+import bcrypt from "bcrypt";
+
 
 export const register = async (req, res) => {
   try {
@@ -9,7 +11,7 @@ export const register = async (req, res) => {
     if (existEmail) {
       return res.status(400).json({ message: "Email already registered!" });
     }
-    if (!passsword || password.length() < 6) {
+    if (!password || password.length < 6) {
       return res
         .status(400)
         .json({ message: "Password should be atleast 6 characters long!" });
