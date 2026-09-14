@@ -12,7 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { serverUrl } = useContext(userDataContext);
   const navigate = useNavigate();
   const handleSubmit = async () => {
@@ -77,13 +77,13 @@ const Login = () => {
         </div>
         {err.length > 0 && <p className="text-[17px] text-red-500"> *{err}</p>}
         <button
-          className="min-w-37.5 h-15 mt-7.5 text-black font-semibold bg-white rounded-full text-[19px] "
+          className="min-w-37.5 h-15 mt-7.5 text-black font-semibold bg-white rounded-full text-[19px] cursor-pointer "
           disabled={loading}
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
         <p
-          className="text-white text-[18px]"
+          className="text-white text-[18px] cursor-pointer"
           onClick={() => {
             navigate("/login");
           }}
