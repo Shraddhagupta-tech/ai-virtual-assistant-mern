@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import bg from "../assets/background.jpg";
+import bg from "../assets/bg.png";
 import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -13,16 +13,19 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const { serverUrl } = useContext(userDataContext);
+  const { serverUrl, userdata, setUserdata } = useContext(userDataContext);
   const navigate = useNavigate();
   useContext(userDataContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       let result = await axios.post(
         `${serverUrl}/api/auth/register`,
         { name, email, password },
         { withCredential: true },
+        setUserdata(result.data),
+        navigate("/customize")
       );
       console.log(result.data);
       setLoading(false);
@@ -30,6 +33,7 @@ const Register = () => {
       console.log(error);
       setErr(error.response.data.message);
       setLoading(false);
+      setUserdata(null);
     }
   };
   return (
@@ -89,6 +93,7 @@ const Register = () => {
         <button
           className="min-w-37.5 h-15 mt-7.5 text-black font-semibold bg-white rounded-full text-[19px] cursor-pointer "
           disabled={loading}
+          onClick={handleSubmit}
         >
           {loading ? "Loading..." : "Sign Up"}
         </button>

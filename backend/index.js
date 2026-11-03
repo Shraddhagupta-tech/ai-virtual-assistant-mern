@@ -2,7 +2,8 @@ import express from "express";
 import authRouter from "./router/authRouter.js";
 import cors from "cors";
 import connectDb from "./config/connectDb.js";
-
+import userRouter from "./router/userRouter.js";
+import cookieParser from "cookie-parser";
 const app = express();
 app.use(
   cors({
@@ -12,9 +13,17 @@ app.use(
 );
 let port = process.env.PORT || 4000;
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 app.listen(port, () => {
   connectDb();
   console.log("server connected");
+});
+
+app.get("/test", (req, res) => {
+  console.log("Test API called");
+
+  res.send("Backend working!");
 });
