@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bg from "../assets/background.jpg";
+import bg from "../assets/bg.png";
 import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -13,19 +13,34 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const { serverUrl } = useContext(userDataContext);
+  const { serverUrl, setUserdata } = useContext(userDataContext);
   const navigate = useNavigate();
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("1. Submit clicked");
+    setLoading(true);
     try {
+      console.log("2. Sending request");
+
       let result = await axios.post(
         `${serverUrl}/api/auth/login`,
         { email, password },
         { withCredentials: true },
       );
-      setLoading(false);
+      console.log("3. Request successful");
+      setUserdata(result.data);
+      navigate("/");
     } catch (error) {
+      console.log("4. Request failed:", error.message);
       console.log(error);
-      setErr(error.response.data.message);
+      setErr(
+        error.response?.data?.message ||
+          error.message ||
+          "Login failed. Please try again.",
+      );
+      setUserdata(null);
+    } finally {
+      console.log("Finally executed");
       setLoading(false);
     }
   };
@@ -78,6 +93,7 @@ const Login = () => {
         {err.length > 0 && <p className="text-[17px] text-red-500"> *{err}</p>}
         <button
           className="min-w-37.5 h-15 mt-7.5 text-black font-semibold bg-white rounded-full text-[19px] cursor-pointer "
+          onClick={handleSubmit}
           disabled={loading}
         >
           {loading ? "Loading..." : "Sign In"}
@@ -85,7 +101,7 @@ const Login = () => {
         <p
           className="text-white text-[18px] cursor-pointer"
           onClick={() => {
-            navigate("/login");
+            navigate("/register");
           }}
         >
           Want to create a new account?{" "}
