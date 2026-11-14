@@ -28,7 +28,11 @@ const Login = () => {
         { withCredentials: true },
       );
       console.log("3. Request successful");
-      setUserdata(result.data);
+      const userResult = await axios.get(`${serverUrl}/api/user/current`, {
+        withCredentials: true,
+      });
+
+      setUserdata(userResult.data);
       navigate("/");
     } catch (error) {
       console.log("4. Request failed:", error.message);
@@ -92,8 +96,8 @@ const Login = () => {
         </div>
         {err.length > 0 && <p className="text-[17px] text-red-500"> *{err}</p>}
         <button
+          type="submit"
           className="min-w-37.5 h-15 mt-7.5 text-black font-semibold bg-white rounded-full text-[19px] cursor-pointer "
-          onClick={handleSubmit}
           disabled={loading}
         >
           {loading ? "Loading..." : "Sign In"}
