@@ -4,6 +4,8 @@ import cors from "cors";
 import connectDb from "./config/connectDb.js";
 import userRouter from "./router/userRouter.js";
 import cookieParser from "cookie-parser";
+import groqResponse from "./groq.js";
+
 const app = express();
 app.use(
   cors({
@@ -22,8 +24,9 @@ app.listen(port, () => {
   console.log("server connected");
 });
 
-app.get("/test", (req, res) => {
-  console.log("Test API called");
-
-  res.send("Backend working!");
+app.get("/", async(req, res) => {
+  let prompt=req.query.prompt
+  let data=await groqResponse(prompt)
+  res.json(data)
+  
 });
